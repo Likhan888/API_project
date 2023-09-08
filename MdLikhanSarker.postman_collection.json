@@ -1,0 +1,441 @@
+{
+	"info": {
+		"_postman_id": "b50a8ae6-3a9b-4388-a5df-baefc4119b6d",
+		"name": "MdLikhanSarker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29102077",
+		"_collection_link": "https://cloudy-zodiac-65279.postman.co/workspace/Md.-Likhan-sarker~eeaed2d5-6e9e-4d39-b50a-21e005cd4256/collection/29102077-b50a8ae6-3a9b-4388-a5df-baefc4119b6d?action=share&source=collection_link&creator=29102077"
+	},
+	"item": [
+		{
+			"name": "Get Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var code=pm.response.code\r",
+							"console.log(code)\r",
+							"if(code==200){\r",
+							"    var jsonData=pm.response.json()\r",
+							"    \r",
+							"    console.log(jsonData.length)\r",
+							"\r",
+							"    pm.test(\"Status code validation\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"else if(code==404){\r",
+							"    pm.test(\"Not Found\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/api/studentsDetails",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData=pm.response.json()\r",
+							"pm.environment.set(\"id\",jsonData.id)\r",
+							"\r",
+							"var code=pm.response.code\r",
+							"console.log(code)\r",
+							"if(code==201){\r",
+							"    var jsonData=pm.response.json()\r",
+							"\r",
+							"    pm.test(\"Status code validation\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"}\r",
+							"else if(code==404){\r",
+							"    pm.test(\"Not Found\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var firstname=pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+							"console.log(\"first name validation:\"+firstname)\r",
+							"pm.environment.set(\"firstname\",firstname)\r",
+							"\r",
+							"var lastname=pm.variables.replaceIn(\"{{$randomLastName}}\")\r",
+							"console.log(\"last name validation:\"+lastname)\r",
+							"pm.environment.set(\"lastname\",lastname)\r",
+							"\r",
+							"var middlename=pm.variables.replaceIn(\"{{$randomFirstName}}\")\r",
+							"console.log(\"middle name validation:\"+middlename)\r",
+							"pm.environment.set(\"middlename\",middlename)\r",
+							"\r",
+							"const moment=require('moment')\r",
+							"const today=moment()\r",
+							"console.log(today.format(\"YYYY-MM-DD\"))\r",
+							"pm.environment.set(\"date_of_birth\",today.add(7,'d').add(12,'M').add(-5,'Y').format(\"YYYY-MM-DD\"))\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"first_name\": \"{{firstname}}\", \r\n\"middle_name\": \"{{middlename}}\", \r\n\"last_name\": \"{{lastname}}\",\r\n\"date_of_birth\": \"{{date_of_birth}}\" \r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/api/studentsDetails",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var code=pm.response.code\r",
+							"console.log(code)\r",
+							"if(code==200){\r",
+							"    var jsonData=pm.response.json()\r",
+							"\r",
+							"    pm.test(\"Status code validation\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"else if(code==404){\r",
+							"    pm.test(\"Not Found\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"\r",
+							"}\r",
+							"\r",
+							"pm.test(\"id validation\",function(){\r",
+							"    pm.expect(jsonData.data.id).to.eql(pm.environment.get(\"id\"))\r",
+							"})\r",
+							"\r",
+							"pm.test(\"first name validation\",function(){\r",
+							"    pm.expect(jsonData.data.first_name).to.eql(pm.environment.get(\"firstname\"))\r",
+							"})\r",
+							"\r",
+							"pm.test(\"last name validation\",function(){\r",
+							"    pm.expect(jsonData.data.last_name).to.eql(pm.environment.get(\"lastname\"))\r",
+							"})\r",
+							"\r",
+							"pm.test(\"middle name validation\",function(){\r",
+							"    pm.expect(jsonData.data.middle_name).to.eql(pm.environment.get(\"middlename\"))\r",
+							"})\r",
+							"\r",
+							"pm.test(\"date of birth validation\",function(){\r",
+							"    pm.expect(jsonData.data.date_of_birth).to.eql(pm.environment.get(\"date_of_birth\"))\r",
+							"})\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/api/studentsDetails/{{id}}",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"studentsDetails",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Technical Skills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var code=pm.response.code\r",
+							"console.log(code)\r",
+							"if(code==201){\r",
+							"    var jsonData=pm.response.json()\r",
+							"\r",
+							"    pm.test(\"Status code validation\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"}\r",
+							"else if(code==200){\r",
+							"    pm.test(\"wrong status code\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"id\": 1, \r\n\"language\": [ \r\n\"Bangla\", \r\n\"English\" \r\n], \r\n\"yearexp\": \"sample string 2\", \r\n\"lastused\": \"sample string 3\", \r\n\"st_id\": {{id}} \r\n} ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/api/technicalskills",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"technicalskills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Student Address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var code=pm.response.code\r",
+							"console.log(code)\r",
+							"if(code==201){\r",
+							"    var jsonData=pm.response.json()\r",
+							"\r",
+							"    pm.test(\"Status code validation\", function () {\r",
+							"        pm.response.to.have.status(201);\r",
+							"    });\r",
+							"}\r",
+							"else if(code==200){\r",
+							"    pm.test(\"wrong status code\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"\r",
+							"}\r",
+							"\r",
+							"var jsonData=pm.response.json()\r",
+							"\r",
+							"pm.test(\"status validation\",function(){\r",
+							"    pm.expect(jsonData.status).to.eql(\"true\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"msg validation\",function(){\r",
+							"    pm.expect(jsonData.msg).to.eql(\"Add  data success\")\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var status=pm.variables.replaceIn(\"{{$randomBoolean}}\")\r",
+							"console.log(\"status value:\"+status)\r",
+							"pm.environment.set(\"status\",status)\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n\"Permanent_Address\": { \r\n\"House_Number\": \"House 1, Road 7/1, Block B, Section 12, Pallabi\",\r\n\"City\": \"Dhaka\",\r\n \"State\": \"sample string 3\", \r\n\"Country\": \"Bangladesh\",\r\n\"PhoneNumber\": [ \r\n{ \r\n\"Std_Code\": \"sample string 1\",\r\n\"Home\": \"sample string 2\",\r\n \"Mobile\": \"Apple 14 pro max\" \r\n},\r\n{ \r\n\"Std_Code\": \"sample string 1\",\r\n\"Home\": \"sample string 2\", \r\n\"Mobile\": \"sample string 3\" \r\n} \r\n] \r\n},\r\n\"stId\": {{id}} \r\n} \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/api/addresses",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"addresses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Final Student Details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var code=pm.response.code\r",
+							"console.log(code)\r",
+							"if(code==200){\r",
+							"    var jsonData=pm.response.json()\r",
+							"    \r",
+							"    console.log(jsonData.length)\r",
+							"\r",
+							"    pm.test(\"Status code validation\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"}\r",
+							"else if(code==404){\r",
+							"    pm.test(\"Not Found\", function () {\r",
+							"        pm.response.to.have.status(404);\r",
+							"    });\r",
+							"\r",
+							"}\r",
+							"\r",
+							"pm.test(\"language validation\",function(){\r",
+							"    pm.expect(jsonData.data.TechnicalDetails[0].language[0]).to.eql(\"Bangla\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Year of Experience validation\",function(){\r",
+							"    pm.expect(jsonData.data.TechnicalDetails[0].language[1]).to.eql(\"English\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"House Number validation\",function(){\r",
+							"    pm.expect(jsonData.data.Address[0].Permanent_Address.House_Number).to.eql(\"House 1, Road 7/1, Block B, Section 12, Pallabi\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"city validation\",function(){\r",
+							"    pm.expect(jsonData.data.Address[0].Permanent_Address.City).to.eql(\"Dhaka\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"country validation\",function(){\r",
+							"    pm.expect(jsonData.data.Address[0].Permanent_Address.Country).to.eql(\"Bangladesh\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Mobile validation\",function(){\r",
+							"    pm.expect(jsonData.data.Address[0].Permanent_Address.PhoneNumber[0].Mobile).to.eql(\"Apple 14 pro max\")\r",
+							"})\r",
+							"\r",
+							"pm.test(\"current address validation\",function(){\r",
+							"    pm.expect(jsonData.data.Address[0].Current_Address).to.eql(null)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var country=pm.variables.replaceIn(\"{{$randomCountry}}\")\r",
+							"console.log(\"country value:\"+country)\r",
+							"pm.environment.set(\"country\",country)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/api/FinalStudentDetails/{{id}}",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"api",
+						"FinalStudentDetails",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
